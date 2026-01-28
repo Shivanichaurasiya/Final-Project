@@ -114,12 +114,6 @@ const PopularCources = () => {
                         </div>  ))}
                         </Slider>
 
-
-
-              
-
-
-
             </div>
 
                 {/* top enrollments */}
