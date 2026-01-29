@@ -97,6 +97,8 @@
 import logo from '../assets/Logo/Logo-Full-Light.png'
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 
 // data/categories.js
@@ -111,24 +113,46 @@ export const categories = [
 
 const Navbar = () => {
    const [open, setOpen] = useState(false);
+   const navigate =useNavigate();
   return (
     <div className=" w-full sticky top-0 bg-gray-800/70 text-white z-50 ">
       <div className="flex justify-between items-center  h-14 shadow-sm shadow-gray-600 xl:px-20 md:px-10 sm:px-5 px-2">
         <div className="text-2xl font-bold  ">
-            <img src={logo} alt="logo" className="h-8" />
+            <img src={logo} alt="logo" className="h-8"  onClick={() => navigate("/")}/>
         </div>
 
         <ul className="flex gap-8 font-semibold ">
-          <li className='hover:text-teal-400'> <a href="/">Home</a></li>
-          <li className='hover:text-teal-400'> <a href="/about">About</a></li>
+          {/* <li className='hover:text-teal-400'> <a href="/">Home</a></li> */}
+
+          <NavLink to="/" className={({isActive})=>
+            `text-lg font-medium cursor-pointer ${
+                isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
+            } hover:text-yellow-500`
+            
+            }> Home </NavLink>
+          {/* <li className='hover:text-teal-400'> <a href="/about">About</a></li> */}
+
+           <NavLink to="/about" className={({isActive})=>
+            `text-lg font-medium cursor-pointer ${
+                isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
+            } hover:text-yellow-500`
+            
+            }> About </NavLink>
            <div className="relative">
-          <button
+          {/* <button
             onClick={() => setOpen(!open)}
             className="flex items-center gap-1 hover:text-teal-400"
           >
-            Categories
+            Courses
             <span className="text-xs">▼</span>
-          </button>
+          </button> */}
+           <NavLink to="/" onClick={() => setOpen(!open)} className={({isActive})=>
+            `text-lg font-medium cursor-pointer ${
+                isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
+            } hover:text-yellow-500`
+            
+            }> Courses </NavLink>
+            <span className="text-xs hover:text-yellow-500">▼</span>
 
           {open && (
             <div className="absolute top-8 left-0 bg-gray-900 border border-gray-700 rounded-lg shadow-lg w-52 z-50">
@@ -145,13 +169,53 @@ const Navbar = () => {
             </div>
           )}
         </div>
-          <li className='hover:text-teal-400'><a href="/contact">Contact</a></li>
+          {/* <li className='hover:text-teal-400'><a href="/contact">Contact</a></li> */}
+           <NavLink to="/contact" className={({isActive})=>
+            `text-lg font-medium cursor-pointer ${
+                isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
+            } hover:text-yellow-500`
+            
+            }> Contact </NavLink>
         </ul>
 
         <div className="flex gap-8 font-semibold">
-          <button className=" hover:text-teal-400 ">Become Instructor</button>
+          {/* <button className=" hover:text-teal-400 ">Become Instructor</button>
           <button className=" hover:text-teal-400 "> <a href="/login">Login</a></button>
-          <button className=" hover:text-teal-400 " > <a href="/signup">SignUp</a></button>
+          <button className=" hover:text-teal-400 " > <a href="/signup">SignUp</a></button> */}
+
+
+          {/* Buttons */}
+
+      <div className='flex flex-wrap justify-center sm:justify-end gap-3 w-full sm:w-auto'>
+         <NavLink to="/login" className={({isActive})=>
+        `px-4 py-2 rounded-md ${
+            isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
+        }`
+        }>
+            Login
+        </NavLink>
+        <NavLink
+            to="/signup"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-md ${
+                isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
+              }`
+            }
+          >
+            Signup
+          </NavLink> 
+          <NavLink
+            to="/becomeanInstructor/signup"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-md ${
+                isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
+              }`
+            }
+          >
+            Become an Istructor
+          </NavLink>
+
+      </div>
         </div>
       </div>
     </div>
