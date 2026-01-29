@@ -11,13 +11,13 @@ const Signup = () => {
   const scaleRef = useRef(null);
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-  });
+  first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  confirm_password: ""
+});
+
 
 const [showPassword, setShowPassword] = useState(false);
 const [showConfirm, setShowConfirm] = useState(false);
@@ -75,8 +75,22 @@ const imageRef = useRef(null);
     return Object.keys(newErrors).length === 0;
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
+
+    const res = await fetch("http://localhost:5000/api/signup",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(formData)
+    })
+    const data = await res.json();
+    if(res.ok){
+      alert("signup successfull");
+      navigate("/login");
+    }
+    else{
+      alert(data.message || "Signup failed")
+    }
     if (!validate()) return;
     console.log("Signup data:", formData, role);
   };
@@ -110,14 +124,15 @@ const imageRef = useRef(null);
                   ref={firstNameRef}
                   type="text"
                   placeholder="First Name"
-                  value={formData.firstName}
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={(e) =>
-                    setFormData({ ...formData, firstName: e.target.value })
+                    setFormData({ ...formData, first_name: e.target.value })
                   }
                   className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
                 />
-                {errors.firstName && (
-                  <p className="text-red-500 text-xs">{errors.firstName}</p>
+                {errors.first_name && (
+                  <p className="text-red-500 text-xs">{errors.first_name}</p>
                 )}
               </div>
 
@@ -127,14 +142,16 @@ const imageRef = useRef(null);
                 <input
                   type="text"
                   placeholder="Last Name"
-                  value={formData.lastName}
+                  name="last_name"
+                  
+                  value={formData.last_name}
                   onChange={(e) =>
-                    setFormData({ ...formData, lastName: e.target.value })
+                    setFormData({ ...formData, last_name: e.target.value })
                   }
                   className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
                 />
-                {errors.lastName && (
-                  <p className="text-red-500 text-xs">{errors.lastName}</p>
+                {errors.last_name && (
+                  <p className="text-red-500 text-xs">{errors.last_name}</p>
                 )}
               </div>
             </div>
@@ -145,6 +162,7 @@ const imageRef = useRef(null);
               <input
                 type="email"
                 placeholder="Email Address"
+                name="email"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -165,6 +183,7 @@ const imageRef = useRef(null);
                 <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create Password"
+                name="password"
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
@@ -183,9 +202,6 @@ const imageRef = useRef(null);
               )}
               </div>
 
-              
-
-
               {/* CONFIRM PASSWORD */}
             <div className="relative">
               <label className="text-sm text-gray-400">Confirm Password</label>
@@ -193,22 +209,23 @@ const imageRef = useRef(null);
               <input
                 type={showConfirm ? "text" : "password"}
                 placeholder="Confirm Password"
-                value={formData.confirmPassword}
+                name="confirm_password"
+                value={formData.confirm_password}
                 onChange={(e) =>
-                  setFormData({ ...formData, confirmPassword: e.target.value })
+                  setFormData({ ...formData, confirm_password: e.target.value })
                 }
                 className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
               />
 
                <span
-    onClick={() => setShowPassword(!showConfirm)}
+    onClick={() => setShowConfirm(!showConfirm)}
     className="absolute right-3 top-[38px] cursor-pointer text-gray-400 hover:text-yellow-400"
   >
     {showConfirm ? <FaEyeSlash /> : <FaEye />}
   </span>
-              {errors.confirmPassword && (
+              {errors.confirm_password && (
                 <p className="text-red-500 text-xs">
-                  {errors.confirmPassword}
+                  {errors.confirm_password}
                 </p>
               )}
             
