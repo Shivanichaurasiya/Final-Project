@@ -3,7 +3,6 @@ import { FaRocketchat } from "react-icons/fa";
 import { FaGlobeAmericas } from "react-icons/fa";
 import { IoCallSharp } from "react-icons/io5";
 
-import Review from "./Review";
 
 
 
@@ -209,7 +208,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <Review/>
+      
     </div>
   );
 };

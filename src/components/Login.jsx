@@ -70,7 +70,7 @@ useEffect(() => {
     if(res.ok){
       localStorage.setItem("token",data.token);
       alert("login successfully")
-      navigate("/contact");
+      navigate("/courses");
 
     }
     else{

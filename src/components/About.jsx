@@ -1,10 +1,7 @@
 import about1 from "../assets/about-1.webp";
 import about2 from "../assets/about-2.webp";
 import about3 from "../assets/about-3.webp";
-import AboutStatsSection from "../components/AboutStatsSection";
-import WorldClassSection from "../components/WorldClassSection";
-import ContactFormSection from "../components/ContactFormSection";
-import Review from "./Review";
+
 
 const About = () => {
   return (
@@ -76,10 +73,7 @@ const About = () => {
         </span>
         .
       </p>
-      <AboutStatsSection />
-      <WorldClassSection />
-      <ContactFormSection />
-      <Review/>
+   
     </div>
   );
 };

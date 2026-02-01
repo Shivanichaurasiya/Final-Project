@@ -1,98 +1,3 @@
-// import React from 'react'
-// import { NavLink } from "react-router-dom";
-// import DownloadLogo from "../assets/download.png";
-// import CatalogDropdown from './CatalogDropdown';
-
-// const Navbar = () => {
-//   return (
-//     <div className=" absolute w-[90%] bg-black mx-auto border-b border-[#2C333F]">
-//       <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-y-4 py-3 text-sm text-white">
-
-//         {/* Logo */}
-//         <NavLink to="/" className="w-32 sm:w-40 px-5 flex items-center justify-center sm:justify-start">
-//         <img src={DownloadLogo} alt="logo" className="w-full h-full object-contain"/>
-//       </NavLink>
-//       {/* Hamburger */}
-//         <button
-//           onClick={() => setIsOpen(!isOpen)}
-//           className="md:hidden text-3xl px-4"
-//         >
-//           ☰
-//         </button>
-
-//       {/* links */}
-//       <div className='hidden md:flex items-center justify-between w-ful'>
-//         <ul className='flex flex-wrap justify-center sm:justify-start gap-6 text-[#DBDDEA] w-full sm:w-auto'>
-//             <NavLink to="/" className={({isActive})=>
-//             `text-lg font-medium cursor-pointer ${
-//                 isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
-//             } hover:text-yellow-500`
-            
-//             }> Home </NavLink>
-        
-//         <CatalogDropdown/>
-
-//         <NavLink to="/about" className={({isActive})=>
-//         `text-lg font-medium cursor-pointer transiton-colors suration-200
-//         ${isActive ? "text-yellow-400" : "text-[#DBDDEA] hover:text-yellow-300"}`
-        
-//         }> About </NavLink>
-
-//         <NavLink
-//             to="/contact"
-//             className={({ isActive }) =>
-//               `text-lg font-medium cursor-pointer transition-colors duration-200
-//      ${isActive ? "text-yellow-400" : "text-[#DBDDEA] hover:text-yellow-300"}`
-//             }
-//           >
-//             Contact Us
-//           </NavLink>
-//       </ul>
-
-      
-//       </div>
-
-
-//       {/* Buttons */}
-//       <div className='flex flex-wrap justify-center sm:justify-end gap-3 w-full sm:w-auto'>
-//         <NavLink to="/login" className={({isActive})=>
-//         `px-4 py-2 rounded-md ${
-//             isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
-//         }`
-//         }>
-//             Login
-//         </NavLink>
-//         <NavLink
-//             to="/signup"
-//             className={({ isActive }) =>
-//               `px-4 py-2 rounded-md ${
-//                 isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
-//               }`
-//             }
-//           >
-//             Signup
-//           </NavLink> 
-//           <NavLink
-//             to="/becomeanInstructor"
-//             className={({ isActive }) =>
-//               `px-4 py-2 rounded-md ${
-//                 isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
-//               }`
-//             }
-//           >
-//             Become an Istructor
-//           </NavLink>
-
-//       </div>
-
-//       </div>
-      
-//     </div>
-//   )
-// }
-
-// export default Navbar;
-
 
 import logo from '../assets/Logo/Logo-Full-Light.png'
 import React, { useState, useRef, useEffect } from 'react';
@@ -114,6 +19,18 @@ export const categories = [
 const Navbar = () => {
    const [open, setOpen] = useState(false);
    const navigate =useNavigate();
+
+
+    const isLoggedIn = !!localStorage.getItem("token");
+
+
+
+ const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+    window.location.reload(); // 🔑 force navbar refresh
+  };
+
   return (
     <div className=" w-full sticky top-0 bg-gray-800/70 text-white z-50 ">
       <div className="flex justify-between items-center  h-14 shadow-sm shadow-gray-600 xl:px-20 md:px-10 sm:px-5 px-2">
@@ -139,13 +56,7 @@ const Navbar = () => {
             
             }> About </NavLink>
            <div className="relative">
-          {/* <button
-            onClick={() => setOpen(!open)}
-            className="flex items-center gap-1 hover:text-teal-400"
-          >
-            Courses
-            <span className="text-xs">▼</span>
-          </button> */}
+          
            <NavLink to="/" onClick={() => setOpen(!open)} className={({isActive})=>
             `text-lg font-medium cursor-pointer ${
                 isActive ? "text-yellow-400" : "text-[#DBDDEA]" 
@@ -179,22 +90,14 @@ const Navbar = () => {
         </ul>
 
         <div className="flex gap-8 font-semibold">
-          {/* <button className=" hover:text-teal-400 ">Become Instructor</button>
-          <button className=" hover:text-teal-400 "> <a href="/login">Login</a></button>
-          <button className=" hover:text-teal-400 " > <a href="/signup">SignUp</a></button> */}
-
 
           {/* Buttons */}
 
       <div className='flex flex-wrap justify-center sm:justify-end gap-3 w-full sm:w-auto'>
-         <NavLink to="/login" className={({isActive})=>
-        `px-4 py-2 rounded-md ${
-            isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
-        }`
-        }>
-            Login
-        </NavLink>
-        <NavLink
+        
+        {!isLoggedIn ? (
+          <>
+          <NavLink
             to="/signup"
             className={({ isActive }) =>
               `px-4 py-2 rounded-md ${
@@ -204,6 +107,15 @@ const Navbar = () => {
           >
             Signup
           </NavLink> 
+
+           <NavLink to="/login" className={({isActive})=>
+        `px-4 py-2 rounded-md ${
+            isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
+        }`
+        }>
+            Login
+        </NavLink>
+        
           <NavLink
             to="/becomeanInstructor/signup"
             className={({ isActive }) =>
@@ -214,6 +126,23 @@ const Navbar = () => {
           >
             Become an Istructor
           </NavLink>
+          </>
+        ): (
+          <>
+          <NavLink to="/mybatch" className={({isActive})=>
+        `px-4 py-2 rounded-md ${
+            isActive ? "bg-yellow-400 text-black" : "text-white text-lg"
+        }`
+        }>
+            MyBatch
+        </NavLink>
+
+        <button onClick={handleLogout}
+        className="px-4 py-2 rounded-md bg-red-500">Logout</button>
+          
+          </>
+
+        )}
 
       </div>
         </div>
@@ -222,5 +151,5 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar;  
 

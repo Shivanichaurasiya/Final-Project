@@ -70,9 +70,9 @@ useEffect(() => {
       <div className="max-w-6xl w-full grid md:grid-cols-2 gap-10 items-center">
         {/* LEFT FORM */}
         <div className="text-white">
-          <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+          <h1 className="text-3xl font-bold mb-2">Login Instructor</h1>
           <p className="text-gray-400 mb-8">
-            Build skills for today, tomorrow, and beyond.
+            
             <span className="text-2xl md:text-2xl font-bold bg-gradient-to-r from-blue-500 via-teal-300 to-green-300 bg-clip-text text-transparent">
               {" "}
               Education to future-proof your career.
