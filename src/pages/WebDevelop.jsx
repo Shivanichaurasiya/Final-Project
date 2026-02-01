@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 const WebDevelop = () => {
   return (
     <div>
-        {/* <WebDevelopment/> */}
+        <WebDevelopment/>
         {/* <Outlet/> */}
         
         

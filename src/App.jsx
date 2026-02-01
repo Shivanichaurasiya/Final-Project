@@ -16,7 +16,12 @@ import Category from "./pages/Category"
 import WebDevelop from './pages/WebDevelop'
 import FreeLearning from "./pages/FreeLearning";
 import Courses from './components/Courses'
-
+import ProtectedRoute from './components/ProtectedRoute'
+import FullSatckPage from './pages/FullSatckPage';
+import MachineLearningPage from './pages/MachineLearningPage'
+import DataSciencePage from './pages/DataSciencePage';
+import DataStucturePage from './pages/DataStucturePage'
+import UIDesignPage from './pages/UIDesignPage';
 
 
 function App() {
@@ -34,7 +39,9 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/courses" element={<Courses/>} />
+          {/* <Route path="/courses" element={<Courses/>} /> */}
+          <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute> }/>
+
           
           
 
@@ -47,12 +54,22 @@ function App() {
           </Route>
           {/*courses section */}
 
-          <Route path="/category" element={<Category/>}>
-          <Route index path="web-development" element={<Courses/>}/>
+          <Route path="/category" element={<ProtectedRoute><Category/></ProtectedRoute>}>
+          <Route index path="web-development" element={<ProtectedRoute><WebDevelop/></ProtectedRoute>}/>
+          <Route index path="full-stack" element={<ProtectedRoute><FullSatckPage/></ProtectedRoute>}/>
+          <Route index path="machine-learning" element={<ProtectedRoute><MachineLearningPage/></ProtectedRoute>}/>
+          <Route index path="data-science" element={<ProtectedRoute><DataSciencePage/></ProtectedRoute>}/>
+          <Route index path="algorithms" element={<ProtectedRoute><DataStucturePage/></ProtectedRoute>}/>
+          <Route index path="ui-ux" element={<ProtectedRoute><UIDesignPage/></ProtectedRoute>}/>
+
           </Route>
 
-          <Route path="free-learning" element={<FreeLearning />} />
+          <Route path="/free-learning" element={<FreeLearning />} />
+
         </Routes>
+
+  
+
       </div>
 
       <div>

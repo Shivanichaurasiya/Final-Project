@@ -13,9 +13,11 @@ const SignupInstructor = () => {
     name: "",
     email: "",
     password: "",
-    experience:"",
+    bio:"",
+    avtarUrl:"",
     qualification:"",
-    course:""
+    experience:"",
+    expertise:""
 
   });
 
@@ -71,27 +73,40 @@ const SignupInstructor = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
+    const res = await fetch("http://localhost:5000/api/signup/instrutor",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+       body:JSON.stringify(formData)
+    })
+    const data = await res.json();
+    if(res.ok){
+      alert("instructor signup success full")
+      navigate('/becomeanInstructor/login')
+    }
+    else{
+      alert(data.message || "Signup failed")
+    }
+    
     if (!validate()) return;
     console.log("Signup data:", formData, role);
   };
   return (
     <div>
-      <div className="min-h-screen bg-black flex items-center justify-center px-4 py-10">
+      <div className="min-h-screen bg-black flex items-center justify-center px-4 py-7">
         <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           {/* LEFT FORM */}
           <div className="text-white w-full">
-            <h1 className="text-2xl sm:text-3xl font-semibold mb-1">
+            <h1 className="text-2xl sm:text-3xl font-semibold mb-2">
               Signp for Instructor
             </h1>
 
-            <p className="text-gray-400 mb-6 leading-relaxed">
-             
-              <span className="block text-lg font-bold bg-gradient-to-r from-blue-500 via-teal-300 to-green-300 bg-clip-text text-transparent">
-               Education is the best policy
+            {/* <p className="text-gray-400 mb-2 leading-relaxed">
+              <span className="block text-xl font-bold bg-gradient-to-r from-blue-500 via-teal-300 to-green-300 bg-clip-text text-transparent">
+               Signup for Instructor
               </span>
-            </p>
+            </p> */}
 
             <form onSubmit={submitHandler} className="space-y-4">
               {/* NAME */}
@@ -102,14 +117,14 @@ const SignupInstructor = () => {
                     type="text"
                     placeholder="Name"
                     name="name"
-                    value={formData.firstName}
+                    value={formData.name}
                     onChange={(e) =>
-                      setFormData({ ...formData, firstName: e.target.value })
+                      setFormData({ ...formData, name: e.target.value })
                     }
                     className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
                   />
-                  {errors.firstName && (
-                    <p className="text-red-500 text-xs">{errors.firstName}</p>
+                  {errors.name && (
+                    <p className="text-red-500 text-xs">{errors.name}</p>
                   )}
                 </div>
 
@@ -150,7 +165,7 @@ const SignupInstructor = () => {
                   />
                   <span
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-[38px] cursor-pointer text-gray-400 hover:text-yellow-400"
+                    className="absolute right-3 top-[20px] cursor-pointer text-gray-400 hover:text-yellow-400"
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
@@ -162,18 +177,29 @@ const SignupInstructor = () => {
                 
               </div>
 
-              {/*experience  */}
+              {/* Bio */}
+
+              <textarea placeholder="Bio"
+              name="bio"
+              value={formData.bio}
+              onChange={(e) =>
+                      setFormData({ ...formData, bio: e.target.value })
+                    }
+                    className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
+              >Bio</textarea>
+
+              {/*Avtar url  */}
 
               <div>
                 <div className="relative">
                  
                   <input
                     type="text"
-                    placeholder="Experience"
-                    name="experience"
-                    value={formData.experience}
+                    placeholder="Avtar URL"
+                    name="avtarUrl"
+                    value={formData.avtarUrl}
                     onChange={(e) =>
-                      setFormData({ ...formData, experience: e.target.value })
+                      setFormData({ ...formData, avtarUrl: e.target.value })
                     }
                     className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
                   />
@@ -199,25 +225,46 @@ const SignupInstructor = () => {
                 </div>
               </div>
 
-
-              {/* Training courses */}
+               {/* Experience */}
 
               <div>
                 <div className="relative">
                   
                   <input
                     type="text"
-                    placeholder="courses"
-                    name="courses"
-                    value={formData.courses}
+                    placeholder="Experience"
+                    name="experience"
+                    value={formData.experience}
                     onChange={(e) =>
-                      setFormData({ ...formData, courses: e.target.value })
+                      setFormData({ ...formData, experience: e.target.value })
                     }
                     className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
                   />
                 </div>
               </div>
 
+
+
+              {/* Expertiese */}
+
+              <div>
+                <div className="relative">
+                  
+                  <input
+                    type="text"
+                    placeholder="Expertise (comma seprated)"
+                    name="expertise"
+                    value={formData.expertise}
+                    onChange={(e) =>
+                      setFormData({ ...formData, expertise: e.target.value })
+                    }
+                    className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
+                  />
+                </div>
+              </div>
+
+
+              
 
               <button
                 type="submit"
