@@ -81,6 +81,7 @@ const courseData = {
 
 const WebDevelopment = () => {
   const [selectedCategory, setSelectedCategory] = useState("Dashboard");
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const navigate = useNavigate();
 
 
@@ -143,7 +144,10 @@ const WebDevelopment = () => {
                     : "Enroll Now"}
                 </button>
 
-                <button className="flex-1 border border-yellow-400 text-yellow-400 py-2 rounded-md hover:bg-yellow-400 hover:text-black">
+                <button 
+                 onClick={() => setSelectedCourse(course)}
+                 className="flex-1 border border-yellow-400 text-yellow-400 py-2 rounded-md hover:bg-yellow-400 hover:text-black">
+
                   View Details
                 </button>
               </div>
@@ -151,6 +155,71 @@ const WebDevelopment = () => {
           ))}
         </div>
       </div>
+
+
+      {/* 🔸 COURSE DETAIL MODAL */}
+{selectedCourse && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    
+    <div className="bg-[#020617] text-white w-[90%] max-w-md rounded-xl p-6 relative">
+
+      {/* Close Button */}
+      <button
+        onClick={() => setSelectedCourse(null)}
+        className=" top-1 font-bold ml-100 text-2xl text-white hover:text-red-500"
+      >
+        ✕
+      </button>
+
+      {/* Course Image */}
+      <img
+        src={selectedCourse.img1}
+        alt="course"
+        className="w-full h-40 object-cover rounded-md mb-4"
+      />
+
+      {/* Course Title */}
+      <h2 className="text-2xl font-bold mb-2">
+        {selectedCourse.title}
+      </h2>
+
+      {/* Price */}
+      <p className="text-yellow-400 font-semibold mb-3">
+        Price: {selectedCourse.price}
+      </p>
+
+      {/* Description */}
+      <p className="text-gray-300 text-sm mb-5">
+        This course will help you learn <b>{selectedCourse.title}</b> from
+        beginner to advanced level with practical examples and projects.
+      </p>
+
+      {/* Action Button */}
+      {selectedCategory === "Free Content" ? (
+  <button
+    onClick={() => {
+      setSelectedCourse(null);
+      navigate("/free-learning");
+    }}
+    className="w-full bg-green-400 text-black py-2 rounded-md font-semibold hover:bg-green-300"
+  >
+    Start Learning
+  </button>
+) : (
+  <button
+    className="w-full bg-yellow-400 text-black py-2 rounded-md font-semibold hover:bg-yellow-300"
+  >
+    Enroll Now
+  </button>
+)}
+
+    </div>
+  </div>
+)}
+
+
+
+
     </div>
   );
 };

@@ -58,8 +58,24 @@ useEffect(() => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
+    const res = await fetch("http://localhost:5000/api/login/instructor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json();
+
+    if(res.ok){
+      localStorage.setItem("token",data.token);
+      alert("instructor login successfully")
+      navigate("/becomeanInstructor/dashboard");
+
+    }
+    else{
+      alert(data.message || "login failed")
+    }
     if (!validate()) return;
 
     console.log("Login Data:", formData);

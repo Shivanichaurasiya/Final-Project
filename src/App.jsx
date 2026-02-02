@@ -22,6 +22,9 @@ import MachineLearningPage from './pages/MachineLearningPage'
 import DataSciencePage from './pages/DataSciencePage';
 import DataStucturePage from './pages/DataStucturePage'
 import UIDesignPage from './pages/UIDesignPage';
+import ProtectedRouteInstructor from './components/ProtectedRouteInstructor'
+import CreateCourse from './components/CreateCourse'
+import EditCourse from './components/EditCourse'
 
 
 function App() {
@@ -47,7 +50,9 @@ function App() {
 
           {/* instructor section */}
           <Route path="/becomeanInstructor" element={<Instructor />}>
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route index path="dashboard" element={<ProtectedRouteInstructor><Dashboard /></ProtectedRouteInstructor>} />
+            <Route index path="newcourse" element={<ProtectedRouteInstructor><CreateCourse /></ProtectedRouteInstructor>} />
+            <Route index path="edit-course" element={<ProtectedRouteInstructor><EditCourse /></ProtectedRouteInstructor>} />
             <Route path="newcourses" element={<AddNewCourses />} />
             <Route path="signup" element={<SignupInstructor />} />
             <Route path="login" element={<LoginInstructor />} />
