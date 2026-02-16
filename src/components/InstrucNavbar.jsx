@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import logo from '../assets/Logo/Logo-Full-Light.png'
 import { NavLink, useNavigate } from "react-router-dom";
@@ -27,7 +26,7 @@ const InstrucNavbar = () => {
             src={logo}
             className='h-8 cursor-pointer'
             alt="logo"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/becomeanInstructor/dashboard")}
           />
         </div>
 

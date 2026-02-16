@@ -1,199 +1,204 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditCourse = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [courseTitle, setCourseTitle] = useState("");
   const [category, setCategory] = useState("");
   const [overview, setOverview] = useState("");
-  const [sections, setSections] = useState([{ title: "", lectures: "" }]);
-  const [price, setPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
+  const [section, setSection] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [thumbnail, setThumbnail] = useState(null);
+  const [oldThumbnail, setOldThumbnail] = useState("");
+  const [isPreview, setIsPreview] = useState(false);
 
-  const finalPrice = price - (price * discount) / 100;
+  const finalPrice =
+    price && discount
+      ? Number(price) - (Number(price) * Number(discount)) / 100
+      : price || 0;
 
-  const handleAddSection = () => {
-    setSections([...sections, { title: "", lectures: "" }]);
-  };
+  // 🔹 GET COURSE
+  useEffect(() => {
+    const getCourse = async () => {
+      const res = await fetch(
+        `http://localhost:5000/api/courses/get/${id}`
+      );
+      const data = await res.json();
 
-  const handleSectionChange = (index, field, value) => {
-    const updated = [...sections];
-    updated[index][field] = value;
-    setSections(updated);
-  };
-
-  const handlePreview = () => {
-    const courseData = {
-      courseTitle,
-      category,
-      overview,
-      sections,
-      price,
-      discount,
-      finalPrice,
+      setCourseTitle(data.Course_Title);
+      setCategory(data.Select_Category);
+      setOverview(data.Course_Overview);
+      setSection(data.Course_Section);
+      setPrice(data.Course_Price);
+      setDiscount(data.Course_Discount || 0);
+      setOldThumbnail(data.Course_Thumbnail);
     };
-    console.log("Preview Course:", courseData);
-    alert("Check console for course preview!");
+    getCourse();
+  }, [id]);
+
+  // 🔹 UPDATE COURSE
+  const handleUpdate = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("Course_Title", courseTitle);
+      formData.append("Select_Category", category);
+      formData.append("Course_Overview", overview);
+      formData.append("Course_Section", section);
+      formData.append("Course_Price", price);
+      formData.append("Course_Discount", discount);
+
+      if (thumbnail) {
+        formData.append("Course_Thumbnail", thumbnail);
+      }
+
+      const res = await fetch(
+        `http://localhost:5000/api/courses/update/${id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      alert("Course updated successfully");
+      navigate("/becomeanInstructor/dashboard");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
-  const handleAddCourse = () => {
-    const courseData = {
-      courseTitle,
-      category,
-      overview,
-      sections,
-      price,
-      discount,
-      finalPrice,
-    };
+  // 🔹 DELETE
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this course?")) return;
 
-    // Example: yaha aap backend API call kar sakte ho
-    console.log("Course Added:", courseData);
-    alert("Course Added Successfully!");
-    
-    // Reset form (optional)
-    setCourseTitle("");
-    setCategory("");
-    setOverview("");
-    setSections([{ title: "", lectures: "" }]);
-    setPrice(0);
-    setDiscount(0);
+    await fetch(
+      `http://localhost:5000/api/courses/delete/${id}`,
+      { method: "DELETE" }
+    );
+
+    alert("Course deleted");
+    navigate("/becomeanInstructor/dashboard");
   };
-
-
-  // Course delete function
-const handleDeleteCourse = () => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete this course?"
-  );
-  if (!confirmDelete) return;
-
-  // Backend API call karke bhi course delete kar sakte ho
-  console.log("Course Deleted:", courseTitle);
-  alert("Course Deleted Successfully!");
-
-  // Reset form
-  setCourseTitle("");
-  setCategory("");
-  setOverview("");
-  setSections([{ title: "", lectures: "" }]);
-  setPrice(0);
-  setDiscount(0);
-};
-
-
-
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-lg mt-6">
-      <h1 className="text-2xl font-bold mb-6">Create New Course</h1>
+      <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
 
-      {/* Course Title */}
-      <input
-        type="text"
-        placeholder="Course Title"
-        className="w-full p-3 rounded-md bg-gray-800 mb-4"
-        value={courseTitle}
-        onChange={(e) => setCourseTitle(e.target.value)}
-      />
-
-      {/* Select Category */}
-      <select
-        className="w-full p-3 rounded-md bg-gray-800 mb-4"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      >
-        <option value="">Select Category</option>
-        <option value="web">Web Development</option>
-        <option value="mobile">Mobile Development</option>
-        <option value="data">Data Science</option>
-        <option value="design">Design</option>
-      </select>
-
-      {/* Course Overview */}
-      <textarea
-        placeholder="Course Overview"
-        className="w-full p-3 rounded-md bg-gray-800 mb-4"
-        rows={4}
-        value={overview}
-        onChange={(e) => setOverview(e.target.value)}
-      />
-
-      {/* Course Sections */}
-      <h2 className="text-lg font-semibold mb-2">Course Sections</h2>
-      {sections.map((section, idx) => (
-        <div key={idx} className="flex gap-3 mb-2">
+      {!isPreview ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsPreview(true);
+          }}
+        >
           <input
-            type="text"
-            placeholder="Section Title"
-            className="flex-1 p-2 rounded-md bg-gray-800"
-            value={section.title}
-            onChange={(e) =>
-              handleSectionChange(idx, "title", e.target.value)
-            }
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={courseTitle}
+            onChange={(e) => setCourseTitle(e.target.value)}
+            placeholder="Course Title"
           />
+
+          <select
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select Category</option>
+            <option value="web">Web</option>
+            <option value="mobile">Mobile</option>
+            <option value="data">Data</option>
+          </select>
+
+          <textarea
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={overview}
+            onChange={(e) => setOverview(e.target.value)}
+            placeholder="Overview"
+          />
+
           <input
-            type="text"
-            placeholder="Lectures (comma separated)"
-            className="flex-1 p-2 rounded-md bg-gray-800"
-            value={section.lectures}
-            onChange={(e) =>
-              handleSectionChange(idx, "lectures", e.target.value)
-            }
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={section}
+            onChange={(e) => setSection(e.target.value)}
+            placeholder="Section"
           />
+
+          <input
+            type="file"
+            className="w-full p-3 bg-gray-800 mb-4"
+            onChange={(e) => setThumbnail(e.target.files[0])}
+          />
+
+          <input
+            type="number"
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="Price"
+          />
+
+          <input
+            type="number"
+            className="w-full p-3 bg-gray-800 mb-4"
+            value={discount}
+            onChange={(e) => setDiscount(e.target.value)}
+            placeholder="Discount"
+          />
+
+          <p className="text-green-400 mb-4">
+            Final Price: ₹{finalPrice}
+          </p>
+
+          <button className="bg-blue-500 px-6 py-2 rounded">
+            Preview
+          </button>
+        </form>
+      ) : (
+        <div className="bg-gray-800 p-6 rounded">
+          <h2 className="text-xl font-bold">Title : {courseTitle}</h2>
+          <p>Overview : {overview}</p>
+          <p>Section : {section}</p>
+          <p>Category : {category}</p>
+          
+          <p>Price : {price}</p>
+
+          <img
+            src={
+              thumbnail
+                ? URL.createObjectURL(thumbnail)
+                : `http://localhost:5000/${oldThumbnail}`
+            }
+            className="h-40 w-full object-cover my-4"
+          />
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => setIsPreview(false)}
+              className="bg-gray-600 px-4 py-2 rounded"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleUpdate}
+              className="bg-yellow-400 text-black px-4 py-2 rounded"
+            >
+              Update
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 px-4 py-2 rounded"
+            >
+              Delete
+            </button>
+          </div>
         </div>
-      ))}
-      <button
-        onClick={handleAddSection}
-        className="bg-green-500 px-4 py-2 rounded-md mb-4 hover:bg-green-600"
-      >
-        Add Section
-      </button>
-
-      {/* Price */}
-      <input
-        type="number"
-        placeholder="Course Price (₹)"
-        className="w-full p-3 rounded-md bg-gray-800 mb-4"
-        value={price}
-        onChange={(e) => setPrice(Number(e.target.value))}
-      />
-
-      {/* Discount */}
-      <input
-        type="number"
-        placeholder="Discount (%)"
-        className="w-full p-3 rounded-md bg-gray-800 mb-2"
-        value={discount}
-        onChange={(e) => setDiscount(Number(e.target.value))}
-      />
-
-      {/* Final Price */}
-      <p className="mb-4 font-semibold text-green-400">
-        Final Price: ₹ {finalPrice}
-      </p>
-
-      {/* Buttons */}
-      <div className="flex gap-4">
-        <button
-          onClick={handlePreview}
-          className="bg-blue-500 px-6 py-3 rounded-md hover:bg-blue-600"
-        >
-          Preview
-        </button>
-
-        <button
-          onClick={handleAddCourse}
-          className="bg-yellow-400 text-black px-6 py-3 rounded-md hover:bg-yellow-500"
-        >
-          Edit Course
-        </button>
-
-        <button
-          onClick={handleAddCourse}
-          className="bg-red-700 text-black px-6 py-3 rounded-md hover:bg-yellow-500"
-        >
-         Delete
-        </button>
-      </div>
+      )}
     </div>
   );
 };

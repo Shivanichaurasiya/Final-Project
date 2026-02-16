@@ -15,6 +15,7 @@ const SignupInstructor = () => {
     name: "",
     email: "",
     password: "",
+    mobile:"",
     bio: "",
     avtarUrl: "",
     qualification: "",
@@ -74,7 +75,9 @@ const SignupInstructor = () => {
           </h1>
 
           <form onSubmit={submitHandler} className="space-y-4">
-            <input
+           <div class="flex gap-1">
+
+             <input
               type="text"
               placeholder="Name"
               value={formData.name}
@@ -93,6 +96,8 @@ const SignupInstructor = () => {
               }
               className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
             />
+            </div>
+
 
             <div className="relative">
               <input
@@ -111,6 +116,16 @@ const SignupInstructor = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
+
+            <input
+              type="number"
+              placeholder="Phone number"
+              value={formData.mobile}
+              onChange={(e) =>
+                setFormData({ ...formData, mobile: e.target.value })
+              }
+              className="w-full p-3 rounded-md bg-[#1e293b] outline-none"
+            />
 
             <textarea
               placeholder="Bio"

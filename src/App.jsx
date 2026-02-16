@@ -25,6 +25,11 @@ import UIDesignPage from './pages/UIDesignPage';
 import ProtectedRouteInstructor from './components/ProtectedRouteInstructor'
 import CreateCourse from './components/CreateCourse'
 import EditCourse from './components/EditCourse'
+import CourseStructure from './components/CourseStructure'
+import FinalCoursePreview from './components/FinalCoursePreview'
+import ViewCourse from './components/ViewCourse'
+import AddLectures from './components/AddLectures'
+import ShowLectures from './components/ShowLectures'
 
 
 function App() {
@@ -36,6 +41,7 @@ function App() {
       <div className="bg-black">
         {/* ✅ Navbar switch */}
         {isInstructorRoute ? <InstrucNavbar /> : <Navbar />}
+        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
@@ -52,10 +58,22 @@ function App() {
           <Route path="/becomeanInstructor" element={<Instructor />}>
             <Route index path="dashboard" element={<ProtectedRouteInstructor><Dashboard /></ProtectedRouteInstructor>} />
             <Route index path="newcourse" element={<ProtectedRouteInstructor><CreateCourse /></ProtectedRouteInstructor>} />
-            <Route index path="edit-course" element={<ProtectedRouteInstructor><EditCourse /></ProtectedRouteInstructor>} />
-            <Route path="newcourses" element={<AddNewCourses />} />
+            <Route index path="edit-course/:id" element={<ProtectedRouteInstructor><EditCourse /></ProtectedRouteInstructor>} />
+            <Route index path="view-course" element={<ProtectedRouteInstructor><ViewCourse /></ProtectedRouteInstructor>} />
+            <Route index path="add-lecture/:courseId" element={<ProtectedRouteInstructor><AddLectures /></ProtectedRouteInstructor>} />
+            <Route index path="show-lectures/:courseId" element={<ProtectedRouteInstructor><ShowLectures /></ProtectedRouteInstructor>} />
+            {/* <Route path="newcourses" element={<AddNewCourses />} /> */}
             <Route path="signup" element={<SignupInstructor />} />
             <Route path="login" element={<LoginInstructor />} />
+            <Route
+  path="course-builder"
+  element={<CourseStructure />}
+/>
+
+<Route
+  path="course-final-preview"
+  element={<FinalCoursePreview />}
+/>
           </Route>
           {/*courses section */}
 
@@ -73,7 +91,7 @@ function App() {
 
         </Routes>
 
-  
+        
 
       </div>
 
